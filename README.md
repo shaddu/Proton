@@ -7,3 +7,6 @@ Application is divided in three parts
 - Web API : Contains various product managment restfull API and uses DataAccessLayer for communication with DB
 - DAL : DataAccessLayer is the core for communication with database and use EF to sync the DB
 
+[~/Images/proton.png]
+
+![alt text](Proton/Images/proton.png)
