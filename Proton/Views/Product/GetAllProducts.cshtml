@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Proton.Models.Product>
+
+@{
+    ViewBag.Title = "GetAllProducts";
+}
+
+<h2>Product <b> Catalogue </b></h2>
+
+<div class="panel">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-9">
+                @using (Html.BeginForm("GetAllProducts","Product",FormMethod.Post))
+                {
+                @Html.TextBox("SearchString","",  new { @class = "form-control" })
+                  <input type="submit" value="Search"  class="btn btn-primary" />
+                }
+            </div>
+
+            <div class="col-sm-3">
+                <a href="@Url.Action("Create")" class="btn btn-default">Add Product</a>
+                <a href="@Url.Action("ExportToExcel",new { searchString = ViewBag.SearchString })" class="btn btn-primary">Export To Excel</a>
+            </div>
+        </div>
+
+        @*<div class=" pull-right">
+            <a href="@Url.Action("Create")" class="btn btn-default">Create</a>
+            <a href="@Url.Action("ExportToExcel",new { searchString = ViewBag.SearchString })" class="btn btn-primary">Export</a>
+        </div>*@
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>Actions</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@Url.Content("~/Images/" + item.Photo)" class="avatar" alt="Avatar">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditProduct", new { code = item.Code }) |
+                        @Html.ActionLink("Delete", "Delete", new { code = item.Code })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
