@@ -46,8 +46,11 @@ namespace Proton.Controllers
             }
         }
 
-        
-        //[HttpGet]  
+        /// <summary>
+        /// Get : Product with code
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public ActionResult EditProduct(string code)
         {
             ServiceRepository serviceObj = new ServiceRepository();
@@ -57,7 +60,12 @@ namespace Proton.Controllers
             ViewBag.Title = "All Products";
             return View(products);
         }
-        //[HttpPost]  
+
+        /// <summary>
+        /// Put : Update product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         public ActionResult Update(Models.Product product)
         {
             var imageFiles = Request.Files;
@@ -67,20 +75,22 @@ namespace Proton.Controllers
             response.EnsureSuccessStatusCode();
             return RedirectToAction("GetAllProducts");
         }
-        public ActionResult Details(string code)
-        {
-            ServiceRepository serviceObj = new ServiceRepository();
-            HttpResponseMessage response = serviceObj.GetResponse("api/product/GetProduct?code=" + code);
-            response.EnsureSuccessStatusCode();
-            Models.Product products = response.Content.ReadAsAsync<Models.Product>().Result;
-            ViewBag.Title = "All Products";
-            return View(products);
-        }
+
+       /// <summary>
+       /// Get : Redirects to create view with model
+       /// </summary>
+       /// <returns></returns>
         [HttpGet]
         public ActionResult Create()
         {
             return View();
         }
+
+        /// <summary>
+        /// Post : Adds product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(Models.Product product)
         {
@@ -94,6 +104,11 @@ namespace Proton.Controllers
             return RedirectToAction("GetAllProducts");
         }
 
+        /// <summary>
+        /// Delete : Deletes product
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public ActionResult Delete(string code)
         {
             ServiceRepository serviceObj = new ServiceRepository();
@@ -102,6 +117,12 @@ namespace Proton.Controllers
             return RedirectToAction("GetAllProducts");
         }
 
+        /// <summary>
+        /// Get : Verifies if code already in use for both create and update views
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult VerifyProductCode(int? Id, string code)
         {
@@ -118,8 +139,14 @@ namespace Proton.Controllers
             return Json(true);
         }
 
+        // TODO : Move this function to different utility controller as it doesnt belongs to products
+        /// <summary>
+        /// Utility function to export product list to excel
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
         [ValidateInput(false)]
-        public FileContentResult ExportToexcel(string searchString)
+        public FileContentResult ExportToExcel(string searchString)
         {
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response;
@@ -130,6 +157,7 @@ namespace Proton.Controllers
                 response = serviceObj.GetResponse("api/product/getallproducts");
 
             List<Models.Product> products = response.Content.ReadAsAsync<List<Models.Product>>().Result;
+            //specifiy the excel columns names 
             string[] columns = { "Code","Name", "Price" };
             byte[] filecontent = ExcelExportHelper.ExportExcel(products, "Product", false, columns);
             return File(filecontent, ExcelExportHelper.ExcelContentType, "ProductList.xlsx");

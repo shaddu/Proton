@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ProductAPI.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class APITest
     {
         [TestMethod]
         public void TestMethod1()
